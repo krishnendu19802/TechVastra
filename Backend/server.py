@@ -1,11 +1,13 @@
 from flask import Flask, request, redirect, url_for,send_file
 from werkzeug.utils import secure_filename
+from flask_cors import CORS
 from PIL import Image
 import subprocess
 import os
 import Helper
 app = Flask(__name__)
 
+CORS(app)
 # Set the folder to save uploaded files
 UPLOAD_FOLDER = 'uploads/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -44,14 +46,16 @@ def upload_file():
     if(value[0]==False):
         return value[1],400
     
-    output_image_path = os.path.join(app.config['OUTPUT_FOLDER'], 'result.jpg')
+    output_image_path = os.path.join(app.config['UPLOAD_FOLDER'], 'result.jpg')
     print(output_image_path)
     # Ensure the output file exists
     if not os.path.exists(output_image_path):
         return 'Output image not found', 500
     print('image found')
-    # return send_file(output_image_path, mimetype='image/jpeg')
-    return 'saved',200
+    # return 'received the files',200
+
+    return send_file(output_image_path, mimetype='image/jpeg')
+    # return 'saved',200
     # return 'Files saved successfully',200
    
 
